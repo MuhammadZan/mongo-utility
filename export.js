@@ -5,15 +5,15 @@ const path = require("path");
 
 require("dotenv").config();
 
-const uri = process.env.MONGO_DB_URL; // Change to your MongoDB URI
-const dbName = process.env.DB_NAME; // Change to your database name
+const uri = process.env.MONGODB_URL; 
+const dbName = process.env.DB_NAME; 
 
 async function exportCollections() {
   const client = new MongoClient(uri);
 
   try {
     await client.connect();
-    console.log("✅ Connected to MongoDB");
+    console.log("Connected to MongoDB");
 
     const db = client.db(dbName);
 
@@ -28,21 +28,19 @@ async function exportCollections() {
       const name = coll.name;
       const collection = db.collection(name);
 
-      console.log(`📦 Exporting collection: ${name}`);
+      console.log(`Exporting collection: ${name}`);
 
-      // Fetch all documents
       const documents = await collection.find({}).toArray();
 
-      // Save as JSON
       const filePath = path.join(__dirname, "exports", `${name}.json`);
       fs.writeFileSync(filePath, JSON.stringify(documents, null, 2));
 
-      console.log(`✅ Exported ${name} to ${filePath}`);
+      console.log(`Exported ${name} to ${filePath}`);
     }
 
-    console.log("🎉 All collections exported!");
+    console.log("All collections exported!");
   } catch (err) {
-    console.error("❌ Error:", err);
+    console.error("Error:", err);
   } finally {
     await client.close();
   }
