@@ -1,1 +1,0 @@
-Place your <collections>.json in this directory or change the directory in import.js
